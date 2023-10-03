@@ -310,6 +310,29 @@ Scenarist_SCC V1.0
     self.check_caption(p_list[2], "caption3", "00:00:10:00", None, "entesque interdum lacinia sollicitudin.")
     self.assertEqual(region_1, p_list[0].get_region())
 
+  def test_scc_weird_buffer_to_investigate(self):
+    scc_content = """Scenarist_SCC V1.0
+00:00:01:00	94AE 94AE 9420 9420 13F8 13F8 C168 6868 A180 94F8 94F8 97A1 97A1 45E5 E5E3 68A1 94F4 94F4 D3E3 61F2 79A1 942C 942C 942F 942F
+00:00:02:00	942F 942F
+    """
+    scc_disassembly_expected = """\
+00:00:01:00	{ENM}{ENM}{RCL}{RCL}{1316}{1316}Ahhh!{1516}{1516}{TO1}{TO1}Eeech!{1508}{1508}Scary!{EDM}{EDM}{EOC}{EOC}
+00:00:02:00	{EOC}{EOC}
+"""
+    scc_disassembly_actual = to_disassembly(scc_content)
+    import ttconv.srt.writer as srt_writer
+    import ttconv.vtt.writer as vtt_writer
+    doc = to_model(scc_content)
+    self.assertIsNotNone(doc)
+    current_srt = srt_writer.from_model(doc)
+
+    current = """10:00:01,567 --> 00:00:02,033\nAhhh!\nScary!ch!\n"""
+    expected_srt = """10:00:01,567 --> 00:00:02,033\n Ahhh!\nScary!  \nEeech!"""
+    self.assertEqual(current_srt, expected_srt)
+
+
+
+
   def test_scc_double_word_in_content(self):
     scc_content = """"Scenarist_SCC V1.0
 01:02:53:14	9420 9420 94AE 94AE 9452 9452 97A1 97A1 20F2 E56D E56D 62E5 F220 9137 9137 9137 9137 942F 942F
