@@ -326,7 +326,7 @@ Scenarist_SCC V1.0
     self.assertIsNotNone(doc)
     current_srt = srt_writer.from_model(doc)
 
-    current = """10:00:01,567 --> 00:00:02,033\nAhhh!\nScary!ch!\n"""
+    current = """10:00:01,567 --> 00:00:02,033\nAhhh!\nSary!ch!\n"""
     expected_srt = """10:00:01,567 --> 00:00:02,033\n Ahhh!\nScary!  \nEeech!"""
     self.assertEqual(current_srt, expected_srt)
 
